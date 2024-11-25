@@ -1,0 +1,6 @@
+MODEL: DATABASE
+VIEW: HTML CSS JS
+CONTROLLER: Menghubungkan antara model dan view
+
+artisan = sebuah perintah untuk memmbuat fitur-fitur yang ada di laravel
+composer = install package yang ada di php
