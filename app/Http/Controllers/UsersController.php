@@ -85,6 +85,9 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $title ='Delete';
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->to('user')->with('success', 'User berhasil dihapus');
     }
 }
