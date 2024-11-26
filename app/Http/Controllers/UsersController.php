@@ -5,24 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         //select * from users
         $users = User::get();
-        return view('kalkulator.user', compact('users'));
+        $title = "Data User";
+        return view('user.index', compact('users', 'title'));
         // compact untuk melempar data dari controller
     }
 
     public function create()
     {
         $title = 'Tambah User';
-        return view('kalkulator.tambah-user', compact('title'));
+        return view('user.create', compact('title'));
     }
 
     /**
@@ -36,6 +36,7 @@ class UsersController extends Controller
         //     'email'=> $request->email,
         //     'password'=> Hash::make($request->password),
         // ]);
+        Alert::success('Yee', 'Data berhasil ditambah');
         return redirect()->to('user');
     }
 
@@ -54,8 +55,9 @@ class UsersController extends Controller
     {
         $title = "Edit User";
         // select * from user where id = '$id'
-        $user = User::find($id)->first();
-        return view('kalkulator.edit-user', compact('title', 'user'));
+        $user = User::find($id);
+
+        return view('user.edit', compact('title', 'user'));
     }
 
     /**
@@ -77,6 +79,15 @@ class UsersController extends Controller
                 'password' => $user->password
             ]);
         }
+        Alert::success('Success Title', 'Success Message');
+        return redirect()->to('user');
+    }
+
+    public function delete($id)
+    {
+        $user = User::find($id)->delete();
+        // meminta ke halaman sebelumnya
+
         return redirect()->to('user');
     }
 
@@ -85,6 +96,11 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //destroy a/ function bawaan dari resource
+        $user = User::find($id)->delete();
+        // meminta ke halaman sebelumnya
+        Alert::success('d', 'Delete');
+
+        return redirect()->to('user');
     }
 }

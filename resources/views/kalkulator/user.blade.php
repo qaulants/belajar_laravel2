@@ -16,7 +16,16 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>
-                    <a href="{{route('user.edit', $user->id)}}">Edit</a>
+                    <a href="{{route('user.edit', $user->id)}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                    {{-- get, delete --}}
+                    {{-- <a href="{{route('delete', $user->id)}}" onclick="return confirm('Apakah anda mau mengahpus data ini?')"><i class="fa-regular fa-trash-can"></i></a> --}}
+                    <form action="{{route('user.destroy', $user->id)}}" method="post" style="display:inline;">
+                        @method('delete')
+                        @csrf
+                        <button type="submit" style="border: none; background: none; color: red;" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
             @endforeach
