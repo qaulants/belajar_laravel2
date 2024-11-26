@@ -5,7 +5,7 @@
         {{-- security dari laravel, agar tidak exp --}}
         @csrf
         <label for="">Angka 1</label>
-        <input type="text" name="angka1" placeholder="Masukkan Angka 1">
+        <input class="form-control" type="text" name="angka1" placeholder="Masukkan Angka 1">
         <br>
         +
         <br>

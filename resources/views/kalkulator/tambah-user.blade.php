@@ -1,6 +1,6 @@
 @extends('kalkulator.index')
 @section('content')
-    <h1>{{$title ?? ''}}</h1>
+<h1>{{$title ?? ''}}</h1>
 
     <form action="{{route('user.store')}}" method="post">
         @csrf
