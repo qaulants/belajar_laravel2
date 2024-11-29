@@ -145,18 +145,63 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script>
+        $('#id_paket').change(function(){
+            // let id_paket = $('#id_paket').val();
+            let id_paket = $(this).val();
+
+            $.ajax({
+                url: '/get-paket/' + id_paket,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    $('#price').val(response.price)
+                }
+            })
+        });
+
+        // ketika di klik dapet id type_of_service nya dan mencari dari yang terselect untuk mendapatkan namanya
+        // paket menggunakan jquery
         $('.add-row').click(function(e){
+            let nama_paket = $('#id_paket').find('option:selected').text(),
+            id_paket = $('#id_paket').val(),
+            harga = $('#price').val(),
+            qty = $('.qty').val(),
+            subtotal = parseInt(harga) * parseInt(qty);
+
+            if(id_paket == ""){
+                alert('Mohon isi paket terlebih dahulu');
+                return false;
+            }
+
+            if(qty == ""){
+                alert('Mohon isi qty terlebih dahulu');
+                return false;
+            }
+
+
             e.preventDefault();
             let newRow = "";
             newRow += "<tr>"
-            newRow += "<td>Ini td 1</td>"
-            newRow += "<td>Ini td 2</td>"
-            newRow += "<td>Ini td 3</td>"
-            newRow += "<td>Ini td 4</td>"
-            newRow += "<tr>"
+            newRow += "<td>" + nama_paket + "<input type='hidden' name='id_paket[]' class='id_paket form-control' value='" + id_paket + "'></td>"
+            newRow += "<td>" + harga + "<input type='hidden' name='price_service[]' value = '"+ harga +"'></td>"
+            newRow += "<td>"+ qty +"<input type='hidden' name='qty[]' id='qty' value = '"+ qty +"'></td>"
+            // newRow += "<td>" + subtotal +"<input type='hidden' name='subtotal[]' value='" + subtotal +"'></td>"
+            // ini yg pakai `
+            newRow += `<td> ${subtotal} <input class='subtotal' type='hidden' name='subtotal[]' value=${subtotal}></td>`
+            newRow += "</tr>"
 
             let tbody = $('.tbody-parent');
             tbody.append(newRow);
+
+            let total = 0;
+            $('.subtotal').each(function(){
+                let totalHarga = parseFloat($(this).val()) || 0;
+                total += totalHarga;
+            });
+
+            $('.total-harga').val(total);
+            $('#id_paket').val("");
+            $('.qty').val("");
         });
     </script>
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])

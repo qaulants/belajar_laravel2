@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -38,14 +39,23 @@ class TransOrderController extends Controller
      */
     public function store(Request $request)
     {
-        Order::create($request->all());
+        $order = Order::create($request->all());
+        foreach ($request->id_paket as $key => $val){
+            OrderDetail::create([
+                'id_order' => $order->id,
+                'id_service' =>  $request->id_paket[$key],
+                'price_service' =>  $request->price_service[$key],
+                'qty' => $request->qty[$key],
+                'subtotal' => $request->subtotal[$key]
+            ]);
+        }
         // User::create([
         //     'name'=> $request->name,
         //     'email'=> $request->email,
         //     'password'=> Hash::make($request->password),
         // ]);
         Alert::success('Yee', 'Data berhasil ditambah');
-        return redirect()->to('order'); //service => routing nya
+        return redirect()->to('trans_order'); //service => routing nya
     }
 
     /**
@@ -84,14 +94,6 @@ class TransOrderController extends Controller
         return redirect()->to('service');
     }
 
-    public function delete($id)
-    {
-        $service = Service::find($id)->delete();
-        // meminta ke halaman sebelumnya
-
-        return redirect()->to('service');
-    }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -103,5 +105,22 @@ class TransOrderController extends Controller
         Alert::success('DDDD', 'Delete');
 
         return redirect()->to('service');
+    }
+
+    public function delete($id)
+    {
+        $service = Service::find($id)->delete();
+        // meminta ke halaman sebelumnya
+
+        return redirect()->to('service');
+    }
+
+    public function getPaket($id_paket)
+    {
+        // ini cara 1
+        $paket = Service::where('id', $id_paket)->first();
+        // ini cara 2
+        // $paket = service::find($id_paket);
+        return response()->json($paket);
     }
 }
